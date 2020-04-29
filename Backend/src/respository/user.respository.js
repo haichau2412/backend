@@ -1,0 +1,30 @@
+const model = require('../model/users');
+
+
+const createUser = async (user) => {
+  return await model.create(user);
+}
+
+const list = () => {
+  return model.find();
+}
+
+const findUserById = async (id) => { return await model.findById(id); }
+
+const findUserByUsername = async (name) => { return await model.findOne({ username: name }).select('+password'); }
+
+const deleteUser = (id) => { return model.findByIdAndDelete(id); }
+
+const updateUser = (id, newUser) => {
+  return model.findByIdAndUpdate(id, newUser, { new: true, runValidators: true });
+}
+
+module.exports = {
+  createUser,
+  list,
+  findUserById,
+  findUserByUsername,
+  deleteUser,
+  updateUser
+}
+
