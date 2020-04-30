@@ -4,7 +4,8 @@ const {
   findUserById,
   findUserByUsername,
   deleteUser,
-  updateUser
+  updateUser,
+  findUserByEmail
 } = require('../respository/user.respository');
 
 
@@ -19,6 +20,7 @@ const getAllUser = async (req, h) => {
 const signUp = async (req, h) => {
   const { username, password, email, confirmedPassword } = req.payload;
   const userFound = await findUserByUsername(username);
+  const emailExist = await findUserByEmail(email);
 
   if (userFound) {
     return 'User Already Registered';
@@ -26,6 +28,9 @@ const signUp = async (req, h) => {
   else {
     if (confirmedPassword !== password) {
       return 'Confirm Password and Password must be the same!';
+    }
+    if (emailExist) {
+      return 'Email already existed. Please choose another email';
     }
   }
 

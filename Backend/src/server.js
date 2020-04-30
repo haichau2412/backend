@@ -10,10 +10,14 @@ dotenv.config({ path: '../config/config.env' });
 const server = Hapi.server({
   port: PORT,
   host: 'localhost',
-  routers: {
-    cors: true
+  routes: {
+    cors: true,
+    validate: {
+      failAction: (request, h, err) => {
+        return err;
+      }
+    }
   }
-
 });
 server.state('token', {
   ttl: process.env.JWT_COOKIE_EXPIRE,

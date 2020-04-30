@@ -13,6 +13,8 @@ const findUserById = async (id) => { return await model.findById(id); }
 
 const findUserByUsername = async (name) => { return await model.findOne({ username: name }).select('+password'); }
 
+const findUserByEmail = async (email) => { return await model.findOne({ email }) }
+
 const deleteUser = (id) => { return model.findByIdAndDelete(id); }
 
 const updateUser = (id, newUser) => {
@@ -25,6 +27,7 @@ module.exports = {
   findUserById,
   findUserByUsername,
   deleteUser,
-  updateUser
+  updateUser,
+  findUserByEmail
 }
 

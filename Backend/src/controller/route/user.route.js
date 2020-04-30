@@ -7,11 +7,24 @@ const {
   deleteUserController
 } = require('../user.controller');
 
+const { signUpValidations,
+  loginValidations,
+  deleteValidation } = require('../validation/user.validation');
+
 const UserRoute = [
   {
     method: 'POST',
     path: '/registration',
-    handler: signUp
+
+    options: {
+      state: {
+        parse: true,
+        failAction: 'error'
+      }
+      ,
+      validate: signUpValidations.all,
+      handler: signUp
+    }
   },
   {
     method: 'GET',
@@ -21,12 +34,14 @@ const UserRoute = [
   {
     method: 'POST',
     path: '/login',
+
     options: {
       state: {
         parse: true,
         failAction: 'error'
       }
       ,
+      validate: loginValidations.all,
       handler: logIn
     }
   }
