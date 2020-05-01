@@ -6,15 +6,20 @@ const OrderSchema = new mongoose.Schema({
     require: true,
     ref: 'User'
   },
-  productID: [{
-    type: mongoose.Types.ObjectId,
-    require: true,
-    ref: 'Product'
-  }],
-  quantity: {
-    type: Number
+  totalPrice: {
+    type: Number,
+    default: 0
   },
-  totalPrice: Number
+  cart: [{
+    productID: {
+      type: String,
+      require: true
+    },
+    quantity: {
+      type: Number,
+      default: 1
+    }
+  }]
 },
   {
     collection: 'Order'

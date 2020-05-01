@@ -6,9 +6,12 @@ const {
   deleteUser,
   updateUser,
   findUserByEmail,
-  addProductToCart
+
 } = require('../respository/user.respository');
 
+const User = require('../model/users');
+
+const Product = require('../model/products');
 
 //get all user
 //@route GET /users
@@ -106,16 +109,84 @@ const updateUserController = async (req, h) => {
 
 //Add product to cart
 //@route PUT /users/cart
-const addToCart = async (req, h) => {
-  const { userID, productID, quantity, totalPrice } = req.payload;
-  if (!userID) {
-    return h.response({ msg: 'Please login' });
+const addToCart = async function (req, h) {
+  try {
+    const { productID } = req.payload;
+    const newPro = { productID };
+    const product = await Product.findById(productID);
+
+    if (!product) {
+      return h.response({ msg: 'Product not found' });
+    }
+    if (!req.user) {
+      return h.response({ msg: 'No token' });
+    }
+
+    let user = await User.findById(req.user.id);
+    console.log(user.cart);
+    //Check product exist in cart
+    let isFound = false;
+    for (let i = 0; i < user.cart.length; i++) {
+      console.log(user.cart[i]);
+      if (user.cart[i].productID == productID) {
+
+        isFound = true;
+        user.cart[i].quantity++;
+      }
+    }
+    if (!isFound) {
+      user.cart.unshift(newPro);
+    }
+
+
+    user = await User.findByIdAndUpdate(req.user.id, { cart: user.cart }, { new: true });
+
+    return h.response({ User: user });
   }
-
-  return addProductToCart(userID, { productID, quantity, totalPrice });
-
+  catch (err) {
+    return h.response({ error: err });
+  }
 }
 
+//Decrease item from cart
+//@route PATCH /users/cart
+const decreaseProductFromCart = async function (req, h) {
+  const { productID } = req.payload;
+  const newPro = { productID };
+  let user = await User.findById(req.user.id);
+  console.log(user.cart);
+  //Check product exist in cart
+  let isFound = false;
+  for (let i = 0; i < user.cart.length; i++) {
+    if (user.cart[i].productID == productID) {
+      isFound = true;
+      if (user.cart[i].quantity == 1) {
+        user.cart.splice(i, 1);
+        i--;
+      }
+      else {
+        user.cart[i].quantity--;
+      }
+
+    }
+  }
+  console.log(isFound);
+  if (!isFound) {
+    return h.response({ msg: 'Product is not in cart' });
+  }
+
+
+  user = await User.findByIdAndUpdate(req.user.id, { cart: user.cart }, { new: true });
+
+  return h.response({ User: user });
+}
+
+//Delete cart 
+//@route DELETE /users/cart
+const deleteCart = async function (req, h) {
+  const user = await User.findByIdAndUpdate(req.user.id, { cart: [] }, { new: true });
+  return h.response({ User: user });
+}
 //Get token from model, create cookie and send respond
 const sendTokenResponse = (user, h) => {
   //Create token
@@ -133,7 +204,9 @@ module.exports = {
   deleteUserController,
   updateUserController,
   addToCart,
-  authentication
+  authentication,
+  decreaseProductFromCart,
+  deleteCart
 }
 
 

@@ -5,7 +5,9 @@ const {
   logIn,
   updateUserController,
   deleteUserController,
-  addToCart
+  addToCart,
+  decreaseProductFromCart,
+  deleteCart
 } = require('../user.controller');
 
 const { signUpValidations,
@@ -51,7 +53,26 @@ const UserRoute = [
   {
     method: 'PUT',
     path: '/users/cart',
-    handler: addToCart
+    config: {
+      pre: [auth],
+      handler: addToCart
+    }
+  },
+  {
+    method: 'PATCH',
+    path: '/users/cart',
+    config: {
+      pre: [auth],
+      handler: decreaseProductFromCart
+    }
+  },
+  {
+    method: 'DELETE',
+    path: '/users/cart',
+    config: {
+      pre: [auth],
+      handler: deleteCart
+    }
   }
 ]
 

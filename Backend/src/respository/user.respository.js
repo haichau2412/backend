@@ -21,15 +21,6 @@ const updateUser = (id, newUser) => {
   return model.findByIdAndUpdate(id, newUser, { new: true, runValidators: true });
 }
 
-const addProductToCart = async (id, newPro) => {
-  let user = await model.findById(id);
-  let cart = user.cart;
-  let updatedCart = cart.unshift(newPro);
-  console.log(updatedCart);
-  user.cart = updatedCart;
-  await user.save();
-  return user;
-}
 
 module.exports = {
   createUser,
@@ -39,6 +30,5 @@ module.exports = {
   deleteUser,
   updateUser,
   findUserByEmail,
-  addProductToCart
 }
 

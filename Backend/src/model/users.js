@@ -32,11 +32,7 @@ const UserSchema = new mongoose.Schema({
       },
       quantity: {
         type: Number,
-        min: 0
-      },
-      totalPrice: {
-        type: Number,
-        min: 0
+        default: 1
       }
     }
   ]

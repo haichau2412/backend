@@ -1,8 +1,11 @@
 const {
   getOrderList,
   getOrderByUser,
-  updateOrder
+  updateOrder,
+  checkOut
 } = require('../order.controller');
+
+const auth = require('../middleware/auth');
 
 
 const orderRoute = [
@@ -15,6 +18,14 @@ const orderRoute = [
     method: 'PUT',
     path: '/orders/{id}',
     handler: updateOrder
+  },
+  {
+    method: 'POST',
+    path: '/orders',
+    config: {
+      pre: [auth],
+      handler: checkOut
+    }
   }
 ]
 
