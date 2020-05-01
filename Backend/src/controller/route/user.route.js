@@ -12,6 +12,8 @@ const { signUpValidations,
   loginValidations,
   deleteValidation } = require('../validation/user.validation');
 
+const auth = require('../middleware/auth');
+
 const UserRoute = [
   {
     method: 'POST',
@@ -35,12 +37,12 @@ const UserRoute = [
   {
     method: 'POST',
     path: '/login',
-
     options: {
       state: {
         parse: true,
         failAction: 'error'
-      }
+      },
+      pre: [auth]
       ,
       validate: loginValidations.all,
       handler: logIn

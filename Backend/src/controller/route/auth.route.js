@@ -1,4 +1,5 @@
 const auth = require('../middleware/auth');
+const { authentication } = require('../user.controller')
 
 const authRoute =
 {
@@ -6,9 +7,7 @@ const authRoute =
   path: '/auth',
   config: {
     pre: [auth],
-    handler: (req, h) => {
-      return h.response('Auth route');
-    }
+    handler: authentication
   }
 
 

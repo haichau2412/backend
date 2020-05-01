@@ -78,6 +78,18 @@ const getUserInfo = async (req, h) => {
   return h.response({ UserInformation: await findUserById(userId) });
 }
 
+const authentication = async (req, h) => {
+  const userId = req.user.id;
+  try {
+    const user = await findUserById(userId);
+    return h.response({ User: user });
+  }
+  catch (err) {
+    return h.response({ error: err });
+  }
+
+}
+
 //Delete User By Id
 //@route DELETE /users/{id}
 const deleteUserController = async (req, h) => {
@@ -110,7 +122,7 @@ const sendTokenResponse = (user, h) => {
   const token = user.getSignedJwtToken();
 
 
-  return h.response(token).state('token', { token, firstvisit: false });
+  return h.response({ Token: token }).state('token', { token, firstvisit: false });
 }
 
 module.exports = {
@@ -120,7 +132,8 @@ module.exports = {
   getUserInfo,
   deleteUserController,
   updateUserController,
-  addToCart
+  addToCart,
+  authentication
 }
 
 
