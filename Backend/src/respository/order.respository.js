@@ -6,7 +6,7 @@ const createOrder = async (order) => {
 }
 
 const list = () => {
-  return model.find().sort(1);
+  return model.find();
 }
 
 const findOrderById = async (id) => { return await model.findById(id); }
@@ -16,10 +16,16 @@ const findOrderByUserID = async (id) => { return await model.find({ userID: id }
 const findOrderByProductID = async (id) => { return await model.find({ productID: id }); }
 
 
-const deleteOrder = (id) => { return model.findByIdAndDelete(id); }
+const deleteOrder = async (id) => { return await model.findByIdAndDelete(id); }
 
-const updateOrder = (id, newOrder) => {
-  return model.findByIdAndUpdate(id, newOrder, { new: true, runValidators: true });
+const updateOrder = async (id, newOrder) => {
+  return await model.findByIdAndUpdate(id, newOrder, { new: true, runValidators: true });
+}
+
+const updateProductInOrder = async (id, product) => {
+  const order = await findOrderById(id);
+  await model.productID.unshift(product);
+  return model.save();
 }
 
 module.exports = {
@@ -29,6 +35,7 @@ module.exports = {
   findOrderByUserID,
   deleteOrder,
   updateOrder,
-  findOrderByProductID
+  findOrderByProductID,
+  updateProductInOrder
 }
 

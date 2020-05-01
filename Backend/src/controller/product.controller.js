@@ -3,16 +3,21 @@ const productRespository = require('../respository/product.respository');
 //get product list
 //@route GET /products
 const getProductList = async (req, h) => {
-  return await productRespository.list();
+  return h.response(await productRespository.list());
 }
 
 const getProductByCategory = async (req, h) => {
   const { category } = req.params;
-  return await productRespository.getProductByCategory(category);
+  return h.response({ Category: await productRespository.getProductByCategory(category) });
+}
+
+const createProduct = async (req, h) => {
+  return h.response({ NewProduct: await productRespository.createProduct(req.payload) });
 }
 
 module.exports =
 {
   getProductList,
-  getProductByCategory
+  getProductByCategory,
+  createProduct
 }

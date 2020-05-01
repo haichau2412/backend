@@ -23,7 +23,23 @@ const UserSchema = new mongoose.Schema({
   },
   fullname: {
     type: String
-  }
+  },
+  cart: [
+    {
+      productID: {
+        type: String,
+        require: true
+      },
+      quantity: {
+        type: Number,
+        min: 0
+      },
+      totalPrice: {
+        type: Number,
+        min: 0
+      }
+    }
+  ]
 
 },
   {

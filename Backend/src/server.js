@@ -11,12 +11,16 @@ const server = Hapi.server({
   port: PORT,
   host: 'localhost',
   routes: {
-    cors: true,
+    cors: {
+      credentials: true,
+      exposedHeaders: ['x-auth-token']
+    },
     validate: {
       failAction: (request, h, err) => {
         return err;
       }
     }
+
   }
 });
 server.state('token', {

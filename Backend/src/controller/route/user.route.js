@@ -4,7 +4,8 @@ const {
   signUp,
   logIn,
   updateUserController,
-  deleteUserController
+  deleteUserController,
+  addToCart
 } = require('../user.controller');
 
 const { signUpValidations,
@@ -44,6 +45,11 @@ const UserRoute = [
       validate: loginValidations.all,
       handler: logIn
     }
+  },
+  {
+    method: 'PUT',
+    path: '/users/cart',
+    handler: addToCart
   }
 ]
 

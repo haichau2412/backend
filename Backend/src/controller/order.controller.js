@@ -11,8 +11,23 @@ const getOrderByUser = async (req, h) => {
   return await orderRespository.getOrderByUser(userid);
 }
 
+const updateOrder = async (req, h) => {
+  const { id } = req.params;
+  const newProduct = req.payload;
+
+  try {
+    await orderRespository.updateProductInOrder(id, newProduct);
+
+    return await orderRespository.findOrderById(id);
+  }
+  catch (err) {
+    return h.response({ error: err });
+  }
+}
+
 module.exports =
 {
-  getProductList,
-  getProductByCategory
+  getOrderList,
+  getOrderByUser,
+  updateOrder
 }

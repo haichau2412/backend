@@ -5,14 +5,15 @@ const {
   findUserByUsername,
   deleteUser,
   updateUser,
-  findUserByEmail
+  findUserByEmail,
+  addProductToCart
 } = require('../respository/user.respository');
 
 
 //get all user
 //@route GET /users
 const getAllUser = async (req, h) => {
-  return await list();
+  return h.response({ List: await list() });
 }
 
 //sign up
@@ -23,14 +24,14 @@ const signUp = async (req, h) => {
   const emailExist = await findUserByEmail(email);
 
   if (userFound) {
-    return 'User Already Registered';
+    return h.response({ msg: 'User Already Registered' });
   }
   else {
     if (confirmedPassword !== password) {
-      return 'Confirm Password and Password must be the same!';
+      return h.response({ msg: 'Confirm Password and Password must be the same!' });
     }
     if (emailExist) {
-      return 'Email already existed. Please choose another email';
+      return h.response({ msg: 'Email already existed. Please choose another email' });
     }
   }
 
@@ -54,12 +55,12 @@ const logIn = async (req, h) => {
   const { username, password } = req.payload;
   const user = await findUserByUsername(username);
   if (!user) {
-    return 'Not Found';
+    return h.response({ msg: 'Not Found' });
   }
   const isMatch = await user.matchPassword(password);
 
   if (!isMatch) {
-    return 'Password is not match';
+    return h.response({ msg: 'Password is not match' });
   }
 
   return sendTokenResponse(user, h);
@@ -74,13 +75,13 @@ const logIn = async (req, h) => {
 const getUserInfo = async (req, h) => {
   const userId = req.params.id;
 
-  return await findUserById(userId);
+  return h.response({ UserInformation: await findUserById(userId) });
 }
 
 //Delete User By Id
 //@route DELETE /users/{id}
 const deleteUserController = async (req, h) => {
-  return await deleteUser(req.params.id);
+  return h.response({ Delete: await deleteUser(req.params.id) });
 }
 
 //Update User 
@@ -89,6 +90,18 @@ const updateUserController = async (req, h) => {
   const newInfo = req.payload;
 
   return await updateUser(req.params.id, newInfo);
+}
+
+//Add product to cart
+//@route PUT /users/cart
+const addToCart = async (req, h) => {
+  const { userID, productID, quantity, totalPrice } = req.payload;
+  if (!userID) {
+    return h.response({ msg: 'Please login' });
+  }
+
+  return addProductToCart(userID, { productID, quantity, totalPrice });
+
 }
 
 //Get token from model, create cookie and send respond
@@ -106,7 +119,8 @@ module.exports = {
   logIn,
   getUserInfo,
   deleteUserController,
-  updateUserController
+  updateUserController,
+  addToCart
 }
 
 

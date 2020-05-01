@@ -6,7 +6,7 @@ const createProduct = async (product) => {
 }
 
 const list = () => {
-  return model.find().sort(1);
+  return model.find();
 }
 
 const findProductById = async (id) => { return await model.findById(id); }

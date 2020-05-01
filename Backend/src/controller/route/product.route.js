@@ -1,6 +1,12 @@
 const { getProductList,
-  getProductByCategory
+  getProductByCategory,
+  createProduct
 } = require('../product.controller');
+
+const {
+  createProductValidations,
+  deleteValidation
+} = require('../validation/product.validation');
 
 
 const productRoute = [
@@ -13,6 +19,14 @@ const productRoute = [
     method: 'GET',
     path: '/products/{category}',
     handler: getProductByCategory
+  },
+  {
+    method: 'POST',
+    path: '/products/add',
+    config: {
+      validate: createProductValidations.all,
+      handler: createProduct
+    }
   }
 ]
 
