@@ -7,6 +7,8 @@ const PORT = process.env.PORT || 5000;
 
 dotenv.config({ path: '../config/config.env' });
 
+
+
 const server = Hapi.server({
   port: PORT,
   host: 'localhost',
@@ -52,6 +54,7 @@ process.on('unhandledRejection', (err, promise) => {
 });
 
 init();
+
 
 
 

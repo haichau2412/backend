@@ -24,6 +24,11 @@ const productRoute = [
     method: 'POST',
     path: '/products/add',
     config: {
+      payload: {
+        output: 'stream',
+        parse: true,
+        allow: 'multipart/form-data'
+      },
       validate: createProductValidations.all,
       handler: createProduct
     }

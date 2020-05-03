@@ -1,4 +1,6 @@
 const productRespository = require('../respository/product.respository');
+const fs = require('fs');
+
 
 //get product list
 //@route GET /products

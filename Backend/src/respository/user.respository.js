@@ -21,6 +21,13 @@ const updateUser = (id, newUser) => {
   return model.findByIdAndUpdate(id, newUser, { new: true, runValidators: true });
 }
 
+const findUserByCheckToken = async (token) => {
+  return await model.findOne({
+    checkToken: token,
+    confirmEmailExpire: { $gt: Date.now() }
+  })
+}
+
 
 module.exports = {
   createUser,
@@ -30,5 +37,6 @@ module.exports = {
   deleteUser,
   updateUser,
   findUserByEmail,
+  findUserByCheckToken
 }
 

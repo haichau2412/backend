@@ -6,8 +6,12 @@ const {
   deleteUser,
   updateUser,
   findUserByEmail,
+  findUserByCheckToken
 
 } = require('../respository/user.respository');
+
+const crypto = require('crypto');
+const sendEmail = require('./middleware/mail');
 
 
 const productRespository = require('../respository/product.respository');
@@ -41,10 +45,24 @@ const signUp = async (req, h) => {
     const newUser = { username, password, email };
 
     const user = await createUser(newUser);
-    return sendTokenResponse(user, h);
+    // Get confirm token
+    const confirmToken = user.getConfirmEmailToken();
+
+    await updateUser(user.id, { checkToken: user.checkToken, confirmEmailExpire: user.confirmEmailExpire });
+    // Create confirm url
+    const confirmUrl = `localhost:5000/auth/confirm-email/${confirmToken}`;
+
+    const message = ` Click on the link below to confirm your email: \n\n ${confirmUrl}`;
+
+    await sendEmail({ email: user.email, subject: "CONFIRM EMAIL", message });
+
+    return h.response({ success: true, data: "Email sent" });
+
   }
+
   catch (err) {
     console.log(err);
+    return h.response({ err });
   }
 
 
@@ -60,9 +78,12 @@ const logIn = async (req, h) => {
     return h.response({ msg: 'Not Found' });
   }
   const isMatch = await user.matchPassword(password);
-
   if (!isMatch) {
     return h.response({ msg: 'Password is not match' });
+  }
+
+  if (!user.isActive) {
+    return h.response({ msg: 'User not active' });
   }
 
   return sendTokenResponse(user, h);
@@ -212,6 +233,34 @@ const sendTokenResponse = (user, h) => {
   return h.response({ token }).state('token', { token, firstvisit: false });
 }
 
+
+// @des Confirm email
+// @route GET /api/auth/confirm-email/:confirmToken
+// @access  Public
+const confirmEmail = async (req, h, next) => {
+  // Get hash token
+  console.log(req.params.confirmToken);
+  const authenticationToken = crypto
+    .createHash("sha256")
+    .update(req.params.confirmToken)
+    .digest("hex");
+
+  const user = await findUserByCheckToken(authenticationToken);
+
+  if (!user) {
+    return h.response({ error: 'No user' });
+  }
+  console.log('1');
+  // Set new password
+  user.isActive = true;
+  user.checkToken = undefined;
+  user.confirmEmailExpire = undefined;
+  await updateUser(user.id, { checkToken: user.checkToken, confirmEmailExpire: user.confirmEmailExpire, isActive: true });
+
+  return sendTokenResponse(user, h);
+
+};
+
 module.exports = {
   getAllUser,
   signUp,
@@ -222,7 +271,8 @@ module.exports = {
   addToCart,
   authentication,
   decreaseProductFromCart,
-  deleteCart
+  deleteCart,
+  confirmEmail
 }
 
 

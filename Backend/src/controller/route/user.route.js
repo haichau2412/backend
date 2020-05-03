@@ -7,7 +7,8 @@ const {
   deleteUserController,
   addToCart,
   decreaseProductFromCart,
-  deleteCart
+  deleteCart,
+  confirmEmail
 } = require('../user.controller');
 
 const { signUpValidations,
@@ -73,6 +74,12 @@ const UserRoute = [
       pre: [auth],
       handler: deleteCart
     }
+  },
+  {
+    method: 'GET',
+    path: '/auth/confirm-email/{confirmToken}',
+    handler: confirmEmail
+
   }
 ]
 

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -23,6 +24,16 @@ const UserSchema = new mongoose.Schema({
   },
   fullname: {
     type: String
+  },
+  isActive: {
+    type: Boolean,
+    default: false
+  },
+  checkToken: {
+    type: String
+  },
+  confirmEmailExpire: {
+    type: Date
   },
   cart: [
     {
@@ -73,9 +84,25 @@ UserSchema.methods.getSignedJwtToken = function () {
 
 //Match user entered password to hashed password in database
 UserSchema.methods.matchPassword = async function (enteredPassword) {
-
+  console.log(await bcrypt.compare(enteredPassword, this.password));
   return await bcrypt.compare(enteredPassword, this.password);
 }
+
+// Generate and hash confirm Email token
+UserSchema.methods.getConfirmEmailToken = function () {
+  // Generate token
+  const confirmToken = crypto.randomBytes(20).toString("hex");
+
+  // Hash token and set to resetPasswordToken
+  this.checkToken = crypto
+    .createHash("sha256")
+    .update(confirmToken)
+    .digest("hex");
+
+  // Set expire
+  this.confirmEmailExpire = Date.now() + 10 * 60 * 10000;
+  return confirmToken;
+};
 
 const model = mongoose.model('User', UserSchema);
 
