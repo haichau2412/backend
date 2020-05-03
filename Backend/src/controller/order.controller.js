@@ -35,22 +35,12 @@ const checkOut = async (req, h) => {
 
   let cart = user.cart;
 
-  let productIDs = [];
-
-  let quantity = {};
-
   let totalPrice = 0;
 
   for (let i = 0; i < cart.length; i++) {
-    productIDs.push(cart[i].productID);
-    quantity[cart[i].productID] = cart[i].quantity;
+    totalPrice += cart[i].productPrice;
   }
 
-  const products = await productRespository.findAllProductInArray(productIDs);
-
-  for (let i = 0; i < products.length; i++) {
-    totalPrice += products[i].price * quantity[products[i]._id];
-  }
 
   await userRespository.updateUser(req.user.id, { cart: [] });
 

@@ -36,6 +36,14 @@ const UserSchema = new mongoose.Schema({
       },
       productPrice: {
         type: Number
+      },
+      size: {
+        type: String,
+        enum: [
+          'S',
+          'M',
+          'L'
+        ]
       }
     }
   ]

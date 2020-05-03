@@ -110,10 +110,18 @@ const updateUserController = async (req, h) => {
 //@route PUT /users/cart
 const addToCart = async function (req, h) {
   try {
-    const { productID } = req.payload;
+    const { productID, size } = req.payload;
     const product = await productRespository.findProductById(productID);
-    const price = product.price;
-    const newPro = { productID, productPrice: price };
+    let price = product.price;
+
+
+    if (size === 'M') {
+      price += (50 / 100) * price;
+    }
+    if (size === 'L') {
+      price += price;
+    }
+    const newPro = { productID, productPrice: price, size };
 
     if (!product) {
       return h.response({ msg: 'Product not found' });
@@ -126,11 +134,12 @@ const addToCart = async function (req, h) {
     //Check product exist in cart
     let isFound = false;
     for (let i = 0; i < user.cart.length; i++) {
-      console.log(user.cart[i].productPrice);
       if (user.cart[i].productID == productID) {
-        isFound = true;
-        user.cart[i].productPrice += price;
-        user.cart[i].quantity++;
+        if (user.cart[i].size == size) {
+          isFound = true;
+          user.cart[i].productPrice += price;
+          user.cart[i].quantity++;
+        }
       }
     }
     if (!isFound) {
@@ -150,25 +159,31 @@ const addToCart = async function (req, h) {
 //Decrease item from cart
 //@route PATCH /users/cart
 const decreaseProductFromCart = async function (req, h) {
-  const { productID } = req.payload;
+  const { productID, size } = req.payload;
   const product = await productRespository.findProductById(productID);
   const price = product.price;
+  if (size === 'M') {
+    price += (50 / 100) * price;
+  }
+  if (size === 'L') {
+    price += price;
+  }
   let user = await findUserById(req.user.id);
-  console.log(user.cart);
   //Check product exist in cart
   let isFound = false;
   for (let i = 0; i < user.cart.length; i++) {
     if (user.cart[i].productID == productID) {
-      isFound = true;
-      if (user.cart[i].quantity == 1) {
-        user.cart.splice(i, 1);
-        i--;
+      if (user.cart[i].size == size) {
+        isFound = true;
+        if (user.cart[i].quantity == 1) {
+          user.cart.splice(i, 1);
+          i--;
+        }
+        else {
+          user.cart[i].quantity--;
+          user.cart[i].productPrice -= price;
+        }
       }
-      else {
-        user.cart[i].quantity--;
-        user.cart[i].productPrice -= price;
-      }
-
     }
   }
   console.log(isFound);
