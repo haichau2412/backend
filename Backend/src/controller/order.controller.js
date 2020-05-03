@@ -1,8 +1,8 @@
 const orderRespository = require('../respository/order.respository');
 
-const User = require('../model/users');
+const userRespository = require('../respository/user.respository');
 
-const Product = require('../model/products');
+const productRespository = require('../respository/product.respository');
 
 //get product list
 //@route GET /products
@@ -31,7 +31,7 @@ const updateOrder = async (req, h) => {
 
 //Check out
 const checkOut = async (req, h) => {
-  const user = await User.findById(req.user.id);
+  const user = await userRespository.findUserById(req.user.id);
 
   let cart = user.cart;
 
@@ -46,15 +46,15 @@ const checkOut = async (req, h) => {
     quantity[cart[i].productID] = cart[i].quantity;
   }
 
-  const products = await Product.find({ _id: { $in: productIDs } });
+  const products = await productRespository.findAllProductInArray(productIDs);
 
   for (let i = 0; i < products.length; i++) {
     totalPrice += products[i].price * quantity[products[i]._id];
   }
 
-  await User.findByIdAndUpdate(req.user.id, { cart: [] }, { new: true });
+  await userRespository.updateUser(req.user.id, { cart: [] });
 
-  return h.response({ Order: await orderRespository.createOrder({ cart, totalPrice }) })
+  return h.response({ order: await orderRespository.createOrder({ userID: req.user.id, cart, totalPrice }) })
 }
 
 module.exports =

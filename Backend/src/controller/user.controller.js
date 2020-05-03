@@ -9,14 +9,13 @@ const {
 
 } = require('../respository/user.respository');
 
-const User = require('../model/users');
 
-const Product = require('../model/products');
+const productRespository = require('../respository/product.respository');
 
 //get all user
 //@route GET /users
 const getAllUser = async (req, h) => {
-  return h.response({ List: await list() });
+  return h.response({ list: await list() });
 }
 
 //sign up
@@ -78,14 +77,14 @@ const logIn = async (req, h) => {
 const getUserInfo = async (req, h) => {
   const userId = req.params.id;
 
-  return h.response({ UserInformation: await findUserById(userId) });
+  return h.response({ userInformation: await findUserById(userId) });
 }
 
 const authentication = async (req, h) => {
   const userId = req.user.id;
   try {
     const user = await findUserById(userId);
-    return h.response({ User: user });
+    return h.response({ user: user });
   }
   catch (err) {
     return h.response({ error: err });
@@ -96,7 +95,7 @@ const authentication = async (req, h) => {
 //Delete User By Id
 //@route DELETE /users/{id}
 const deleteUserController = async (req, h) => {
-  return h.response({ Delete: await deleteUser(req.params.id) });
+  return h.response({ delete: await deleteUser(req.params.id) });
 }
 
 //Update User 
@@ -112,8 +111,9 @@ const updateUserController = async (req, h) => {
 const addToCart = async function (req, h) {
   try {
     const { productID } = req.payload;
-    const newPro = { productID };
-    const product = await Product.findById(productID);
+    const product = await productRespository.findProductById(productID);
+    const price = product.price;
+    const newPro = { productID, productPrice: price };
 
     if (!product) {
       return h.response({ msg: 'Product not found' });
@@ -122,15 +122,14 @@ const addToCart = async function (req, h) {
       return h.response({ msg: 'No token' });
     }
 
-    let user = await User.findById(req.user.id);
-    console.log(user.cart);
+    let user = await findUserById(req.user.id);
     //Check product exist in cart
     let isFound = false;
     for (let i = 0; i < user.cart.length; i++) {
-      console.log(user.cart[i]);
+      console.log(user.cart[i].productPrice);
       if (user.cart[i].productID == productID) {
-
         isFound = true;
+        user.cart[i].productPrice += price;
         user.cart[i].quantity++;
       }
     }
@@ -139,9 +138,9 @@ const addToCart = async function (req, h) {
     }
 
 
-    user = await User.findByIdAndUpdate(req.user.id, { cart: user.cart }, { new: true });
+    user = await updateUser(req.user.id, { cart: user.cart });
 
-    return h.response({ User: user });
+    return h.response({ user: user });
   }
   catch (err) {
     return h.response({ error: err });
@@ -152,8 +151,9 @@ const addToCart = async function (req, h) {
 //@route PATCH /users/cart
 const decreaseProductFromCart = async function (req, h) {
   const { productID } = req.payload;
-  const newPro = { productID };
-  let user = await User.findById(req.user.id);
+  const product = await productRespository.findProductById(productID);
+  const price = product.price;
+  let user = await findUserById(req.user.id);
   console.log(user.cart);
   //Check product exist in cart
   let isFound = false;
@@ -166,6 +166,7 @@ const decreaseProductFromCart = async function (req, h) {
       }
       else {
         user.cart[i].quantity--;
+        user.cart[i].productPrice -= price;
       }
 
     }
@@ -176,16 +177,16 @@ const decreaseProductFromCart = async function (req, h) {
   }
 
 
-  user = await User.findByIdAndUpdate(req.user.id, { cart: user.cart }, { new: true });
+  user = await updateUser(req.user.id, { cart: user.cart });
 
-  return h.response({ User: user });
+  return h.response({ user: user });
 }
 
 //Delete cart 
 //@route DELETE /users/cart
 const deleteCart = async function (req, h) {
-  const user = await User.findByIdAndUpdate(req.user.id, { cart: [] }, { new: true });
-  return h.response({ User: user });
+  const user = await updateUser(req.user.id, { cart: [] }, { new: true });
+  return h.response({ user: user });
 }
 //Get token from model, create cookie and send respond
 const sendTokenResponse = (user, h) => {
@@ -193,7 +194,7 @@ const sendTokenResponse = (user, h) => {
   const token = user.getSignedJwtToken();
 
 
-  return h.response({ Token: token }).state('token', { token, firstvisit: false });
+  return h.response({ token }).state('token', { token, firstvisit: false });
 }
 
 module.exports = {

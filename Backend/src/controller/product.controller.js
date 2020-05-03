@@ -8,11 +8,11 @@ const getProductList = async (req, h) => {
 
 const getProductByCategory = async (req, h) => {
   const { category } = req.params;
-  return h.response({ Category: await productRespository.getProductByCategory(category) });
+  return h.response({ category: await productRespository.getProductByCategory(category) });
 }
 
 const createProduct = async (req, h) => {
-  return h.response({ NewProduct: await productRespository.createProduct(req.payload) });
+  return h.response({ product: await productRespository.createProduct(req.payload) });
 }
 
 module.exports =

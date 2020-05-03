@@ -24,6 +24,10 @@ const updateProduct = (id, newProduct) => {
   return model.findByIdAndUpdate(id, newProduct, { new: true, runValidators: true });
 }
 
+const findAllProductInArray = async (arr) => {
+  return await model.find({ _id: { $in: arr } });
+}
+
 module.exports = {
   createProduct,
   list,
@@ -31,6 +35,7 @@ module.exports = {
   deleteProduct,
   updateProduct,
   findProductByProductname,
-  findProductByCategory
+  findProductByCategory,
+  findAllProductInArray
 }
 
