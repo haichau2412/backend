@@ -7,7 +7,7 @@ const createProductPayload = {
   category: Joi.string().required(),
   description: Joi.string().max(500),
   price: Joi.number().required(),
-  photo: Joii.image()
+  photo: Joi.string()
 };
 
 
