@@ -1,8 +1,8 @@
-const orderRespository = require('../respository/order.respository');
+const orderRespository = require('../respository/order.repository');
 
-const userRespository = require('../respository/user.respository');
+const userRespository = require('../respository/user.repository');
 
-const productRespository = require('../respository/product.respository');
+const productRespository = require('../respository/product.repository');
 
 //get product list
 //@route GET /products

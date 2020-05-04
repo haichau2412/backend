@@ -8,13 +8,13 @@ const {
   findUserByEmail,
   findUserByCheckToken
 
-} = require('../respository/user.respository');
+} = require('../respository/user.repository');
 
 const crypto = require('crypto');
 const sendEmail = require('./middleware/mail');
 
 
-const productRespository = require('../respository/product.respository');
+const productRespository = require('../respository/product.repository');
 
 //get all user
 //@route GET /users

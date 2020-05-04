@@ -1,4 +1,4 @@
-const productRespository = require('../respository/product.respository');
+const productRespository = require('../respository/product.repository');
 const fs = require('fs');
 
 
