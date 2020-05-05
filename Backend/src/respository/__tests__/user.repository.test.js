@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const mongoDB = "mongodb://127.0.0.1/Test";
+const mongoDB = "mongodb://127.0.0.1/myTest";
 mongoose.connect(mongoDB);
 
 const User = require('../../model/users');
