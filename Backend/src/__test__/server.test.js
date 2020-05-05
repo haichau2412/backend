@@ -1,4 +1,4 @@
-const route = require('../controller/route/index');
+const { Hapi } = require('../server');
 const request = require('supertest');
 const mongoose = require('mongoose');
 const mongoDB = 'mongodb://127.0.0.1/myTest';
@@ -6,13 +6,16 @@ mongoose.connect(mongoDB);
 
 describe('Route test', () => {
   it('Has a module', () => {
-    expect(route).toBeDefined();
+    expect(Hapi).toBeDefined();
   });
 
   let server;
 
   beforeAll(() => {
-    server = route.listen(5000);
+    server = Hapi.server({
+      port: process.env.PORT,
+      host: 'localhost'
+    });
   });
 
   afterAll((done) => {
@@ -20,9 +23,21 @@ describe('Route test', () => {
     server.close(done);
   });
 
+
   describe("user route test", () => {
     it("can list users", async () => {
-      await request(server).get("/users").expect(200);
+      const requestDefaults = {
+        method: 'GET',
+        url: '/users',
+        payload: {}
+      };
+
+      const request = Object.assign({}, requestDefaults);
+
+      return server.inject(request)
+        .then(response => {
+          response.is(response.statusCode, 400, 'status code is 400');
+        });
     })
   })
 })

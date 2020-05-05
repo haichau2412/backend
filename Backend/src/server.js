@@ -56,7 +56,7 @@ process.on('unhandledRejection', (err, promise) => {
 init();
 
 
-
+module.exports = { Hapi };
 
 
 

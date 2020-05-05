@@ -3,15 +3,13 @@ const nodemailer = require("nodemailer");
 // async..await is not allowed in global scope, must use a wrapper
 const sendEmail = async options => {
   const transporter = nodemailer.createTransport({
-    host: "smtp.mailtrap.io",
-    port: 2525,
+    service: 'Gmail',
     auth: {
-      user: "bb8dc765a01f59",
-      pass: "532f959bda1b99"
+      user: "dpq3005@gmail.com",
+      pass: "Beadspun09"
     }
   });
 
-  console.log("Email");
   // send mail with defined transport object
   const message = {
     from: `${process.env.FROM_NAME} ${process.env.FROM_EMAIL}`, // sender address
@@ -21,7 +19,6 @@ const sendEmail = async options => {
     secure: true
   };
 
-  console.log("Email2");
   const info = await transporter.sendMail(message);
 
   console.log("Message sent: %s", info.messageId);
