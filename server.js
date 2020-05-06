@@ -1,6 +1,6 @@
 const Hapi = require('@hapi/hapi');
 const dotenv = require('dotenv');
-const connectDB = require('./Backend/src/db');
+const connectDB = require('./db');
 const routes = require('./Backend/src/controller/route/index');
 
 const PORT = process.env.PORT || 5000;
