@@ -52,7 +52,7 @@ const signUp = async (req, h) => {
     // Create confirm url
     const confirmUrl = `localhost:5000/auth/confirm-email/${confirmToken}`;
 
-    const message = ` Click on the link below to confirm your email: \n\n<a> ${confirmUrl}</a>`;
+    const message = ` Click on the link below to confirm your email: \n\nhttp://${confirmUrl}`;
 
     await sendEmail({ email: user.email, subject: "[CONFIRM EMAIL TO FINISH THE REGISTRATION]", message });
 

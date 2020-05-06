@@ -9,7 +9,7 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     enum: [
       'Pizza',
-      'Baverage',
+      'Dessert',
       'Drink'
     ]
   },
