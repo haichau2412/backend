@@ -56,7 +56,10 @@ const signUp = async (req, h) => {
 
     await sendEmail({ email: user.email, subject: "[CONFIRM EMAIL TO FINISH THE REGISTRATION]", message });
 
-    return h.response({ success: true, data: "Email sent" });
+    return h.response({
+      success: true, data: "Email sent",
+      token: user.getSignedJwtToken()
+    });
 
   }
 
@@ -239,7 +242,6 @@ const sendTokenResponse = (user, h) => {
 // @access  Public
 const confirmEmail = async (req, h, next) => {
   // Get hash token
-  console.log(req.params.confirmToken);
   const authenticationToken = crypto
     .createHash("sha256")
     .update(req.params.confirmToken)
@@ -250,7 +252,6 @@ const confirmEmail = async (req, h, next) => {
   if (!user) {
     return h.response({ error: 'No user' });
   }
-  console.log('1');
   // Set new password
   user.isActive = true;
   user.checkToken = undefined;
