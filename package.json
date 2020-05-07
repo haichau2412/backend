@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "jest",
+    "postinstall": "npm run build",
     "start": "nodemon server.js"
   },
   "author": "",

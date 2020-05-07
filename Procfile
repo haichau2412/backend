@@ -1,4 +1,4 @@
 web:node server.js
 web: gunicorn server:app
 
-log.Fatal(http.ListenAndServe(":" + os.Getenv("PORT"), router))
+webpack-dev-server --port $PORT --host 0.0.0.0 
