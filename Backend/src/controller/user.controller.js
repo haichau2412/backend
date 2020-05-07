@@ -56,10 +56,7 @@ const signUp = async (req, h) => {
 
     await sendEmail({ email: user.email, subject: "[CONFIRM EMAIL TO FINISH THE REGISTRATION]", message });
 
-    return h.response({
-      success: true, data: "Email sent",
-      token: user.getSignedJwtToken()
-    });
+    return h.response({ msg: 'Email sent' });
 
   }
 
@@ -210,7 +207,7 @@ const decreaseProductFromCart = async function (req, h) {
       }
     }
   }
-  console.log(isFound);
+
   if (!isFound) {
     return h.response({ msg: 'Product is not in cart' });
   }
@@ -240,7 +237,7 @@ const sendTokenResponse = (user, h) => {
 // @des Confirm email
 // @route GET /api/auth/confirm-email/:confirmToken
 // @access  Public
-const confirmEmail = async (req, h, next) => {
+const confirmEmail = async (req, h) => {
   // Get hash token
   const authenticationToken = crypto
     .createHash("sha256")
