@@ -1,11 +1,11 @@
 const Hapi = require('@hapi/hapi');
-const dotenv = require('dotenv');
+// const dotenv = require('dotenv');
 const connectDB = require('./db');
 const routes = require('./Backend/src/controller/route/index');
 
 const PORT = process.env.PORT || 5000;
 
-dotenv.config({ path: './Backend/config/config.env' });
+// dotenv.config({ path: './Backend/config/config.env' });
 
 
 
@@ -36,14 +36,10 @@ server.state('token', {
 server.route(routes);
 
 const init = async () => {
-  try {
-    await server.start();
-    console.info('INFO: Server running on %s/documentation', server.info.uri);
-    connectDB();
-  }
-  catch (e) {
-    console.log(e);
-  }
+  await server.start();
+  console.info('INFO: Server running on %s/documentation', server.info.uri);
+  connectDB();
+
 
 };
 
