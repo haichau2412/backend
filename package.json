@@ -34,5 +34,9 @@
     "node",
     "heroku",
     "Hapi"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dpq3005/Final"
+  }
 }
