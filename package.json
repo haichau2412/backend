@@ -28,7 +28,7 @@
     "supertest": "^4.0.2"
   },
   "engines": {
-    "node": "v12.11.1"
+    "node": "12.11.1"
   },
   "keywords": [
     "node",

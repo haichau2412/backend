@@ -5,7 +5,7 @@ const routes = require('./Backend/src/controller/route/index');
 
 const PORT = process.env.PORT || 5000;
 
-// dotenv.config({ path: './Backend/config/config.env' });
+dotenv.config({ path: './Backend/config/config.env' });
 
 
 const server = Hapi.server({
