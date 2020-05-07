@@ -36,9 +36,15 @@ server.state('token', {
 server.route(routes);
 
 const init = async () => {
-  await server.start();
-  console.info('INFO: Server running on %s/documentation', server.info.uri);
-  connectDB();
+  try {
+    await server.start();
+    console.info('INFO: Server running on %s/documentation', server.info.uri);
+    connectDB();
+  }
+  catch (e) {
+    console.log(e);
+  }
+
 };
 
 
