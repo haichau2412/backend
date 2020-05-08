@@ -48,10 +48,13 @@ const updateOrder = async (req, h) => {
 // }
 
 const checkOut = async (req, h) => {
+  if (!req.user) {
+    return h.response({ msg: 'Please login before check out' });
+  }
   const user = await userRespository.findUserById(req.user.id);
-  const { cart, address } = req.payload.data;
+  const { cart, address } = req.payload;
   await orderRespository.createOrder({ userID: user, cart, address });
-  return h.resonse({ msg: 'success' });
+  return h.response({ msg: 'Order successfully' });
 }
 
 
