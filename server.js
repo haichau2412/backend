@@ -13,6 +13,7 @@ const server = Hapi.server({
   host: 'localhost',
   routes: {
     cors: {
+      origin: ['*'],
       credentials: true,
       exposedHeaders: ['x-auth-token']
     },
