@@ -47,7 +47,7 @@ const updateOrder = async (req, h) => {
 //   return h.response({ order: await orderRespository.createOrder({ userID: req.user.id, cart, totalPrice }) })
 // }
 
-const checkOut = (req, h) => {
+const checkOut = async (req, h) => {
   const user = await userRespository.findUserById(req.user.id);
   const { cart, address } = req.payload.data;
   await orderRespository.createOrder({ userID: user, cart, address });
