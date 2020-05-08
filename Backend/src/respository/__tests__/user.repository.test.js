@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const faker = require('faker');
 
 const mongoDB = "mongodb://127.0.0.1/myTest";
 mongoose.connect(mongoDB);

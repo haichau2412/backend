@@ -10,6 +10,9 @@ const OrderSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
+  address: {
+    type: String
+  },
   cart: [{
     productID: {
       type: String,

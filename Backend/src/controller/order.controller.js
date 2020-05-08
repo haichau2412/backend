@@ -30,22 +30,31 @@ const updateOrder = async (req, h) => {
 }
 
 //Check out
-const checkOut = async (req, h) => {
+// const checkOut = async (req, h) => {
+//   const user = await userRespository.findUserById(req.user.id);
+
+//   let cart = user.cart;
+
+//   let totalPrice = 0;
+
+//   for (let i = 0; i < cart.length; i++) {
+//     totalPrice += cart[i].productPrice;
+//   }
+
+
+//   await userRespository.updateUser(req.user.id, { cart: [] });
+
+//   return h.response({ order: await orderRespository.createOrder({ userID: req.user.id, cart, totalPrice }) })
+// }
+
+const checkOut = (req, h) => {
   const user = await userRespository.findUserById(req.user.id);
-
-  let cart = user.cart;
-
-  let totalPrice = 0;
-
-  for (let i = 0; i < cart.length; i++) {
-    totalPrice += cart[i].productPrice;
-  }
-
-
-  await userRespository.updateUser(req.user.id, { cart: [] });
-
-  return h.response({ order: await orderRespository.createOrder({ userID: req.user.id, cart, totalPrice }) })
+  const { cart, address } = req.payload.data;
+  await orderRespository.createOrder({ userID: user, cart, address });
+  return h.resonse({ msg: 'success' });
 }
+
+
 
 module.exports =
 {
