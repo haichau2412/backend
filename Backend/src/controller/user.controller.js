@@ -75,19 +75,17 @@ const logIn = async (req, h) => {
   const { username, password } = req.payload;
   const user = await findUserByUsername(username);
   if (!user) {
-    return h.response({ msg: 'Not Found' });
+    return h.response({ msg: 'Username or password is incorrect' });
   }
-  if (user.isActive === false) {
-    return h.response({ msg: 'User is not active! Check your email' });
-  }
-  const isMatch = await user.matchPassword(password);
-  if (!isMatch) {
-    return h.response({ msg: 'Password is not match' });
-  }
-
   if (!user.isActive) {
     return h.response({ msg: 'User not active' });
   }
+  const isMatch = await user.matchPassword(password);
+  if (!isMatch) {
+    return h.response({ msg: 'Username or password is incorrect' });
+  }
+
+
 
   return sendTokenResponse(user, h);
 
