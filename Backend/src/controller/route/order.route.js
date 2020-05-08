@@ -12,8 +12,9 @@ const orderRoute = [
   {
     method: 'GET',
     path: '/orders',
-    handler: getOrderList
+    handler: getOrderByUser
   },
+
   {
     method: 'PUT',
     path: '/orders/{id}',

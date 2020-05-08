@@ -11,8 +11,11 @@ const getOrderList = async (req, h) => {
 }
 
 const getOrderByUser = async (req, h) => {
-  const { userid } = req.params;
-  return await orderRespository.getOrderByUser(userid);
+  if (!req.user) {
+    return h.response({ msg: 'Please login' });
+  }
+  const { id } = req.user;
+  return await orderRespository.getOrderByUser(id);
 }
 
 const updateOrder = async (req, h) => {
