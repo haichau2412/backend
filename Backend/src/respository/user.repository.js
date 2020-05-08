@@ -18,7 +18,7 @@ const findUserByEmail = async (email) => { return await model.findOne({ email })
 const deleteUser = (id) => { return model.findByIdAndDelete(id); }
 
 const updateUser = (id, newUser) => {
-  return model.findByIdAndUpdate(id, newUser, { new: true, runValidators: true });
+  return model.findByIdAndUpdate(id, newUser, { new: true, runValidators: true }).select('+password');
 }
 
 const findUserByCheckToken = async (token) => {

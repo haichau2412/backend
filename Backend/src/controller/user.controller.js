@@ -77,6 +77,9 @@ const logIn = async (req, h) => {
   if (!user) {
     return h.response({ msg: 'Not Found' });
   }
+  if (user.isActive === false) {
+    return h.response({ msg: 'User is not active! Check your email' });
+  }
   const isMatch = await user.matchPassword(password);
   if (!isMatch) {
     return h.response({ msg: 'Password is not match' });
