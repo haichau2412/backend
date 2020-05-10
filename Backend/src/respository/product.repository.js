@@ -18,7 +18,7 @@ const findProductByCategory = async (categoryName) => {
 }
 
 const findProductInfo = async (productID) => {
-  return await (await model.findOne({ _id: productID })).populated('Product');
+  return await model.findOne({ _id: productID }).populated('Product');
 }
 
 
