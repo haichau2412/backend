@@ -58,6 +58,8 @@ const checkOut = async (req, h) => {
   const user = await userRespository.findUserById(req.user.id);
   const { cart, address, totalPrice } = req.payload;
   const productInfo = await productRespository.findProductInfo(cart.product);
+  console.log(productInfo);
+  console.log(cart);
   await orderRespository.createOrder({ userID: user, cart: [{ product: productInfo }], address, totalPrice });
   return h.response({ msg: 'Order successfully' });
 }
