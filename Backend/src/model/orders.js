@@ -14,9 +14,10 @@ const OrderSchema = new mongoose.Schema({
     type: String
   },
   cart: [{
-    productID: {
-      type: String,
-      require: true
+    product: {
+      type: mongoose.Types.ObjectId,
+      require: true,
+      ref: 'Product'
     },
     quantity: {
       type: Number,

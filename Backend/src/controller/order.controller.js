@@ -54,10 +54,11 @@ const checkOut = async (req, h) => {
   if (!req.user) {
     return h.response({ msg: 'Please login before check out' });
   }
-  console.log(req.headers);
+
   const user = await userRespository.findUserById(req.user.id);
   const { cart, address, totalPrice } = req.payload;
-  await orderRespository.createOrder({ userID: user, cart, address, totalPrice });
+  const productInfo = await productRespository.findProductInfo(cart.product);
+  await orderRespository.createOrder({ userID: user, cart: [{ product: productInfo }], address, totalPrice });
   return h.response({ msg: 'Order successfully' });
 }
 

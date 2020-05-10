@@ -17,6 +17,10 @@ const findProductByCategory = async (categoryName) => {
   return await model.find({ category: categoryName });
 }
 
+const findProductInfo = async (productID) => {
+  return await (await model.findOne({ _id: productID })).populated('Product');
+}
+
 
 const deleteProduct = (id) => { return model.findByIdAndDelete(id); }
 
@@ -36,6 +40,7 @@ module.exports = {
   updateProduct,
   findProductByProductname,
   findProductByCategory,
-  findAllProductInArray
+  findAllProductInArray,
+  findProductInfo
 }
 
