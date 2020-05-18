@@ -11,11 +11,12 @@ const getOrderList = async (req, h) => {
 }
 
 const getOrderByUser = async (req, h) => {
+
   if (!req.user) {
     return h.response({ msg: 'Please login' });
   }
   const { id } = req.user;
-  return await orderRespository.getOrderByUser(id);
+  return await orderRespository.findOrderByUserID(id);
 }
 
 const updateOrder = async (req, h) => {
@@ -51,14 +52,15 @@ const updateOrder = async (req, h) => {
 // }
 
 const checkOut = async (req, h) => {
+
   if (!req.user) {
     return h.response({ msg: 'Please login before check out' });
   }
 
   const user = await userRespository.findUserById(req.user.id);
-  const { cart, address, totalPrice } = req.payload;
-  console.log(cart);
-  await orderRespository.createOrder({ userID: user, cart, address, totalPrice });
+  const { cart, address, totalPrice, phone } = req.payload;
+  console.log({ cart });
+  await orderRespository.createOrder({ userID: user, cart, address, totalPrice, phone });
   return h.response({ msg: 'Order successfully' });
 }
 

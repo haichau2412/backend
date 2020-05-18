@@ -77,7 +77,7 @@ const UserRoute = [
   },
   {
     method: 'GET',
-    path: '/auth/confirm-email/{confirmToken}',
+    path: '/{confirmToken}/{username}',
     handler: confirmEmail
 
   }

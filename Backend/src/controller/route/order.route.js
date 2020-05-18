@@ -12,7 +12,10 @@ const orderRoute = [
   {
     method: 'GET',
     path: '/orders',
-    handler: getOrderByUser
+    config: {
+      pre: [auth],
+      handler: getOrderByUser
+    }
   },
 
   {

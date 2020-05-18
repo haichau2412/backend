@@ -10,7 +10,7 @@ dotenv.config({ path: './Backend/config/config.env' });
 
 const server = Hapi.server({
   port: PORT,
-  host: 'localhost',
+  host: '0.0.0.0',
   routes: {
     cors: {
       origin: ['*'],
