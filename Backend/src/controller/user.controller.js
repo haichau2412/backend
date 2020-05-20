@@ -50,7 +50,7 @@ const signUp = async (req, h) => {
 
     await updateUser(user.id, { checkToken: user.checkToken, confirmEmailExpire: user.confirmEmailExpire });
     // Create confirm url
-    const confirmUrl = `172.16.51.184:3000/confirm/${confirmToken}/${user.username}`;
+    const confirmUrl = `172.16.190.180:3000/confirm/${confirmToken}/${user.username}`;
 
     const message = ` Click on the link below to confirm your email: \n\nhttp://${confirmUrl}`;
 
@@ -256,11 +256,9 @@ const confirmEmail = async (req, h) => {
   user.confirmEmailExpire = undefined;
   await updateUser(user.id, { checkToken: user.checkToken, confirmEmailExpire: user.confirmEmailExpire, isActive: true });
 
-  const token = user.getSignedJwtToken();
+  const token = await user.getSignedJwtToken();
 
   return h.response({ msg: 'Confirm success', token });
-
-
 
 };
 
